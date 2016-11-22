@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using FunctionalDecomposition;
 using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartup(typeof(FunctionalDecomposition.Startup))]
+[assembly: OwinStartup(typeof(Startup))]
 
 namespace FunctionalDecomposition
 {
@@ -12,7 +10,7 @@ namespace FunctionalDecomposition
   {
     public void Configuration(IAppBuilder app)
     {
-      ConfigureAuth(app);
+      this.ConfigureAuth(app);
     }
   }
 }

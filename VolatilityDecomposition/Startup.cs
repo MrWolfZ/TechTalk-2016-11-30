@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Owin;
+﻿using Microsoft.Owin;
 using Owin;
+using VolatilityDecomposition;
 
-[assembly: OwinStartup(typeof(VolatilityDecomposition.Startup))]
+[assembly: OwinStartup(typeof(Startup))]
 
 namespace VolatilityDecomposition
 {
@@ -12,7 +10,7 @@ namespace VolatilityDecomposition
   {
     public void Configuration(IAppBuilder app)
     {
-      ConfigureAuth(app);
+      this.ConfigureAuth(app);
     }
   }
 }

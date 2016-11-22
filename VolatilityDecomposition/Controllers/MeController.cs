@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web;
+﻿using System.Web;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
-using Owin;
 using VolatilityDecomposition.Models;
 
 namespace VolatilityDecomposition.Controllers
@@ -17,7 +9,7 @@ namespace VolatilityDecomposition.Controllers
   [Authorize]
   public class MeController : ApiController
   {
-    private ApplicationUserManager _userManager;
+    private ApplicationUserManager userManager;
 
     public MeController()
     {
@@ -25,26 +17,20 @@ namespace VolatilityDecomposition.Controllers
 
     public MeController(ApplicationUserManager userManager)
     {
-      UserManager = userManager;
+      this.UserManager = userManager;
     }
 
     public ApplicationUserManager UserManager
     {
-      get
-      {
-        return _userManager ?? HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
-      }
-      private set
-      {
-        _userManager = value;
-      }
+      get { return this.userManager ?? HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
+      private set { this.userManager = value; }
     }
 
     // GET api/Me
     public GetViewModel Get()
     {
-      var user = UserManager.FindById(User.Identity.GetUserId());
-      return new GetViewModel() { Hometown = user.Hometown };
+      var user = this.UserManager.FindById(this.User.Identity.GetUserId());
+      return new GetViewModel { Hometown = user.Hometown };
     }
   }
 }

@@ -2,13 +2,13 @@ using System.Collections.ObjectModel;
 
 namespace FunctionalDecomposition.Areas.HelpPage.ModelDescriptions
 {
-    public class ComplexTypeModelDescription : ModelDescription
+  public class ComplexTypeModelDescription : ModelDescription
+  {
+    public ComplexTypeModelDescription()
     {
-        public ComplexTypeModelDescription()
-        {
-            Properties = new Collection<ParameterDescription>();
-        }
-
-        public Collection<ParameterDescription> Properties { get; private set; }
+      this.Properties = new Collection<ParameterDescription>();
     }
+
+    public Collection<ParameterDescription> Properties { get; private set; }
+  }
 }

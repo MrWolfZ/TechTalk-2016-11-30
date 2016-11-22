@@ -1,13 +1,12 @@
-@using VolatilityDecomposition.Areas.HelpPage
-@model InvalidSample
+@model VolatilityDecomposition.Areas.HelpPage.SampleGeneration.InvalidSample
 
 @if (HttpContext.Current.IsDebuggingEnabled)
 {
-    <div class="warning-message-container">
-        <p>@Model.ErrorMessage</p>
-    </div>
+  <div class="warning-message-container">
+    <p>@Model.ErrorMessage</p>
+  </div>
 }
 else
 {
-    <p>Sample not available.</p>
+  <p>Sample not available.</p>
 }

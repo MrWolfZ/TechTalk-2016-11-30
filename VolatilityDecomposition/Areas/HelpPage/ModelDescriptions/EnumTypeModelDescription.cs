@@ -1,15 +1,14 @@
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace VolatilityDecomposition.Areas.HelpPage.ModelDescriptions
 {
-    public class EnumTypeModelDescription : ModelDescription
+  public class EnumTypeModelDescription : ModelDescription
+  {
+    public EnumTypeModelDescription()
     {
-        public EnumTypeModelDescription()
-        {
-            Values = new Collection<EnumValueDescription>();
-        }
-
-        public Collection<EnumValueDescription> Values { get; private set; }
+      this.Values = new Collection<EnumValueDescription>();
     }
+
+    public Collection<EnumValueDescription> Values { get; private set; }
+  }
 }
