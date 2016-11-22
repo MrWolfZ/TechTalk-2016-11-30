@@ -6,11 +6,10 @@ using Owin;
 
 namespace FunctionalDecomposition
 {
-  public partial class Startup
+  public class Startup
   {
     public void Configuration(IAppBuilder app)
     {
-      this.ConfigureAuth(app);
     }
   }
 }

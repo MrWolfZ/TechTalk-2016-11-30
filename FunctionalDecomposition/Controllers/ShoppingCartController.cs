@@ -1,8 +1,8 @@
-﻿using System.Web.Mvc;
+using System.Web.Mvc;
 
 namespace FunctionalDecomposition.Controllers
 {
-  public class HomeController : Controller
+  public class ShoppingCartController : Controller
   {
     public ActionResult Index()
     {
