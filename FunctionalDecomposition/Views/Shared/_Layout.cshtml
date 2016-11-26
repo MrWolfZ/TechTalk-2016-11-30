@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - FunctionalDecomposition</title>
+    <title>@ViewData["Title"] - Book Store</title>
 
     <environment names="Development">
       <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -26,28 +26,39 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">FunctionalDecomposition</a>
+          <a asp-area="" asp-controller="Books" asp-action="Index" class="navbar-brand">Book Store</a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li>
-              <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+              <a asp-area="" asp-controller="Books" asp-action="Index">Books</a>
             </li>
             <li>
-              <a asp-area="" asp-controller="Home" asp-action="About">About</a>
+              <a asp-area="" asp-controller="Checkout" asp-action="Index">Checkout</a>
             </li>
             <li>
-              <a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
+              <a asp-area="" asp-controller="Info" asp-action="About">About</a>
             </li>
           </ul>
         </div>
       </div>
     </div>
     <div class="container body-content">
-      @RenderBody()
+      <div class="row">
+        <div class="col-xs-6 col-sm-8 col-md-9">
+          <div class="container-fluid">
+            @RenderBody()
+          </div>
+        </div>
+        <div class="col-xs-6 col-sm-4 col-md-3">
+          <div class="container-fluid">
+            @await Component.InvokeAsync("ShoppingCart")
+          </div>
+        </div>
+      </div>
       <hr />
       <footer>
-        <p>&copy; 2016 - FunctionalDecomposition</p>
+        <p>&copy; 2016 - Book Store</p>
       </footer>
     </div>
 

@@ -1,0 +1,21 @@
+﻿@model FunctionalDecomposition.DataTransferObjects.ShoppingCartDto
+
+<div class="row">
+  <div class="col-xs-12">
+    <h3>Cart</h3>
+  </div>
+  @foreach (var book in Model.Books)
+  {
+    <div class="col-xs-12">
+      <h5>@Html.DisplayTextFor(m => book.Title)</h5>
+      <span>@Html.DisplayTextFor(m => book.Price.CurrencyCode) @Html.DisplayTextFor(m => book.Price.Amount)</span>
+    </div>
+  }
+  @if (Model.Books.Count == 0)
+  {
+    <span>Shopping cart is empty!</span>
+  }
+  <div class="col-xs-12">
+    <h4>Total: @Html.DisplayTextFor(m => m.TotalPrice.CurrencyCode)  @Html.DisplayTextFor(m => m.TotalPrice.Amount)</h4>
+  </div>
+</div>

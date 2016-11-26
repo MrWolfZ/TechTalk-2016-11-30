@@ -1,0 +1,12 @@
+﻿@model FunctionalDecomposition.DataTransferObjects.BookDto
+
+<h3>@Html.DisplayTextFor(m => m.Title)</h3>
+<img src="@Html.DisplayTextFor(m => m.ThumbnailUrl)" alt="No image found" />
+<br />
+<span>@Html.DisplayTextFor(m => m.Price.CurrencyCode) @Html.DisplayTextFor(m => m.Price.Amount)</span>
+<br />
+@using (Html.BeginForm("AddBook", "ShoppingCart", FormMethod.Post))
+{
+  @Html.HiddenFor(m => m.Id)
+  <input type="submit" class="btn btn-primary" value="Add to Cart" />
+}

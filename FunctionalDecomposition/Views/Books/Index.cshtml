@@ -1,0 +1,14 @@
+﻿@{
+  ViewData["Title"] = "Books";
+}
+
+@model FunctionalDecomposition.DataTransferObjects.BookSearchResultDto
+
+<div class="row">
+  @foreach (var book in Model.Books)
+  {
+    <div class="col-sm-6 col-md-3">
+      @Html.Partial("_Book", book)
+    </div>
+  }
+</div>
