@@ -1,15 +1,55 @@
-﻿using FunctionalDecomposition;
-using Microsoft.Owin;
-using Owin;
-
-[assembly: OwinStartup(typeof(Startup))]
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace FunctionalDecomposition
 {
   public class Startup
   {
-    public void Configuration(IAppBuilder app)
+    public Startup(IHostingEnvironment env)
     {
+      this.Configuration =
+        new ConfigurationBuilder()
+          .SetBasePath(env.ContentRootPath)
+          .AddJsonFile("appsettings.json", true, true)
+          .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
+          .AddEnvironmentVariables()
+          .Build();
+    }
+
+    public IConfigurationRoot Configuration { get; }
+
+    public void ConfigureServices(IServiceCollection services)
+    {
+      services.AddMvc();
+    }
+
+    public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+    {
+      loggerFactory.AddConsole(this.Configuration.GetSection("Logging"));
+      loggerFactory.AddDebug();
+
+      if (env.IsDevelopment())
+      {
+        app.UseDeveloperExceptionPage();
+        app.UseBrowserLink();
+      }
+      else
+      {
+        app.UseExceptionHandler("/Home/Error");
+      }
+
+      app.UseStaticFiles();
+
+      app.UseMvc(
+        routes =>
+        {
+          routes.MapRoute(
+            "default",
+            "{controller=Home}/{action=Index}/{id?}");
+        });
     }
   }
 }
