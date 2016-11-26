@@ -19,7 +19,7 @@ namespace FunctionalDecomposition.Controllers
     }
 
     [HttpPost("books")]
-    public async Task<ActionResult> AddBook(BookDto dto)
+    public async Task<ActionResult> AddBook(BookDto dto, string q)
     {
       if (!this.ModelState.IsValid)
       {
@@ -29,7 +29,7 @@ namespace FunctionalDecomposition.Controllers
       var model = (await this.bookService.Get(dto.Id)).First();
       await this.shoppingCartService.AddBookAsync(model);
 
-      return this.RedirectToAction("Index", "Books");
+      return this.RedirectToAction("Index", "Books", new { q });
     }
   }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FunctionalDecomposition.DataTransferObjects;
@@ -20,14 +21,22 @@ namespace FunctionalDecomposition.Controllers
 
     public async Task<IActionResult> Index(string q)
     {
-      var books = await this.bookService.Search(q);
-      var dtos = this.mapper.Map<ICollection<BookDto>>(books);
+      this.ViewBag.Query = q;
 
       var result = new BookSearchResultDto
       {
-        Books = dtos
+        Books = new List<BookDto>()
       };
 
+      if (string.IsNullOrEmpty(q))
+      {
+        return this.View(result);
+      }
+
+      var books = await this.bookService.Search(q);
+      var dtos = this.mapper.Map<ICollection<BookDto>>(books);
+
+      result.Books = dtos.Take(16).ToList();
       return this.View(result);
     }
   }

@@ -1,50 +1,54 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
+using FunctionalDecomposition.ExternalDataTransferObjects;
 using FunctionalDecomposition.Models;
 using FunctionalDecomposition.Services.Interfaces;
+using Newtonsoft.Json;
 
 namespace FunctionalDecomposition.Services
 {
   internal class GoogleBooksApiBookService : IBookService
   {
-    private static readonly ICollection<Book> Books = new List<Book>
+    public async Task<ICollection<Book>> Search(string q)
     {
-      new Book
+      using (var client = new HttpClient())
       {
-        Id = "1",
-        Title = "Test Book",
-        ThumbnailUrl = "no URL",
-        Price = new Price
-        {
-          Amount = 1.44,
-          CurrencyCode = "CHF"
-        }
-      },
-      new Book
-      {
-        Id = "2",
-        Title = "Second Book",
-        Price = new Price
-        {
-          Amount = 5.13,
-          CurrencyCode = "CHF"
-        }
+        var resp = await client.GetStringAsync($"https://www.googleapis.com/books/v1/volumes?q={q}&langRestrict=en&maxResults=40");
+        var collection = JsonConvert.DeserializeObject<GoogleBooksVolumeCollectionDto>(resp);
+        return collection.Items.Where(dto => dto.SaleInfo?.RetailPrice != null).Select(Convert).ToList();
       }
-    };
-
-    public async Task<ICollection<Book>> Search(string searchTerm)
-    {
-      await Task.Yield();
-      return Books;
     }
 
     public async Task<ICollection<Book>> Get(IEnumerable<string> ids)
     {
-      await Task.Yield();
-      return Books.Where(b => ids.Contains(b.Id)).ToList();
+      using (var client = new HttpClient())
+      {
+        // ReSharper disable once AccessToDisposedClosure
+        return await Task.WhenAll(ids.Select(id => GetVolumeById(client, id)));
+      }
     }
 
     public Task<ICollection<Book>> Get(string id) => this.Get(new[] { id });
+
+    private static async Task<Book> GetVolumeById(HttpClient client, string id)
+    {
+      var resp = await client.GetStringAsync($"https://www.googleapis.com/books/v1/volumes/{id}");
+      var dto = JsonConvert.DeserializeObject<GoogleBooksVolumeDto>(resp);
+      return Convert(dto);
+    }
+
+    private static Book Convert(GoogleBooksVolumeDto dto) => new Book
+    {
+      Id = dto.Id,
+      Title = dto.VolumeInfo.Title,
+      ThumbnailUrl = dto.VolumeInfo.ImageLinks?.Thumbnail,
+      Price = new Price
+      {
+        Amount = dto.SaleInfo?.RetailPrice?.Amount ?? 0,
+        CurrencyCode = dto.SaleInfo?.RetailPrice?.CurrencyCode
+      }
+    };
   }
 }
