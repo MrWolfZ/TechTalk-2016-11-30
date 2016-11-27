@@ -7,5 +7,6 @@ namespace FunctionalDecomposition.Services.Interfaces
   {
     Task<ShoppingCart> GetForCurrentUserAsync();
     Task AddBookAsync(Book book);
+    Task RemoveBookAsync(string id);
   }
 }

@@ -30,6 +30,19 @@ namespace FunctionalDecomposition.Services
       await this.shoppingCartRepository.AddOrUpdateAsync(cart);
     }
 
+    public async Task RemoveBookAsync(string id)
+    {
+      var cart = await this.GetForCurrentUserAsync();
+      var book = cart.Books.FirstOrDefault(b => b.Id == id);
+      if (book != null)
+      {
+        cart.Books.Remove(book);
+        cart.TotalPrice.Amount -= book.Price.Amount;
+      }
+
+      throw new System.NotImplementedException();
+    }
+
     private static ShoppingCart CreateEmptyShoppingCart() => new ShoppingCart
     {
       Id = 1,
