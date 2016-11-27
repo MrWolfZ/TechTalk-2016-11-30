@@ -1,6 +1,7 @@
 ﻿{
   "dependencies": {
-    "AutoMapper": "5.2.0", 
+    "Autofac": "4.2.1",
+    "Autofac.Extensions.DependencyInjection": "4.0.0",
     "Microsoft.NETCore.App": {
       "version": "1.0.1",
       "type": "platform"

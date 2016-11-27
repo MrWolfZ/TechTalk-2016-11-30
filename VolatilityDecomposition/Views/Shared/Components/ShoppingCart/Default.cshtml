@@ -1,5 +1,4 @@
-﻿@using VolatilityDecomposition.DataTransferObjects
-@model VolatilityDecomposition.DataTransferObjects.ShoppingCartDto
+﻿@model VolatilityDecomposition.Views.Shared.Components.ShoppingCart.Dto.ShoppingCart
 
 <div class="row">
   <div class="col-xs-12">
@@ -10,11 +9,11 @@
     <div class="col-xs-12">
       <h5>@Html.DisplayTextFor(m => book.Title)</h5>
       <span>@Html.DisplayTextFor(m => book.Price.CurrencyCode) @Html.DisplayTextFor(m => book.Price.Amount)</span>
-      @*<br/>
+      <br/>
       @using (Html.BeginForm("RemoveBook", "ShoppingCart", new { id = book.Id, q = @ViewBag.Query }, FormMethod.Post))
       {
         <input type="submit" class="btn btn-danger" value="Remove" style="margin: 5px 0 10px 0;" />
-      }*@
+      }
     </div>
   }
   @if (Model.Books.Count == 0)

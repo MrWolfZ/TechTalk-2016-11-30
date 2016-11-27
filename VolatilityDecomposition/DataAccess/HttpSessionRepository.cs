@@ -2,8 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using VolatilityDecomposition.DataAccess.Interfaces;
-using VolatilityDecomposition.Utility;
+using Newtonsoft.Json;
 
 namespace VolatilityDecomposition.DataAccess
 {
@@ -20,18 +19,23 @@ namespace VolatilityDecomposition.DataAccess
 
     private ISession Session => this.httpContextAccessor.HttpContext.Session;
 
-    public IQueryable<T> GetAll()
-    {
-      var col = this.Session.GetObjectFromJson<ICollection<T>>(SessionKey) ?? new List<T>();
-      return col.AsQueryable();
-    }
+    public IQueryable<T> GetAll() => this.GetCollectionFromSession().AsQueryable();
 
     public Task AddOrUpdateAsync(T item)
     {
       var items = this.GetAll().ToDictionary(i => i.Id);
       items[item.Id] = item;
-      this.Session.SetObjectAsJson(SessionKey, items.Values);
+      this.UpdateCollectionInSession(items.Values);
       return Task.CompletedTask;
+    }
+
+    public void UpdateCollectionInSession(ICollection<T> value) =>
+      this.Session.SetString(SessionKey, JsonConvert.SerializeObject(value));
+
+    public ICollection<T> GetCollectionFromSession()
+    {
+      var value = this.Session.GetString(SessionKey);
+      return value == null ? new List<T>() : JsonConvert.DeserializeObject<ICollection<T>>(value);
     }
   }
 }

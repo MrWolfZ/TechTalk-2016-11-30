@@ -1,15 +1,12 @@
-﻿using System.Reflection;
-using AutoMapper;
+﻿using System;
+using System.Reflection;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using VolatilityDecomposition.DataAccess;
-using VolatilityDecomposition.DataAccess.Interfaces;
-using VolatilityDecomposition.Services;
-using VolatilityDecomposition.Services.Interfaces;
 
 namespace VolatilityDecomposition
 {
@@ -28,19 +25,18 @@ namespace VolatilityDecomposition
 
     public IConfigurationRoot Configuration { get; }
 
-    public void ConfigureServices(IServiceCollection services)
+    public IServiceProvider ConfigureServices(IServiceCollection services)
     {
       services.AddMvc();
       services.AddDistributedMemoryCache();
       services.AddSession();
-      services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-      services.Add(ServiceDescriptor.Transient(typeof(IRepository<>), typeof(HttpSessionRepository<>)));
-      services.AddTransient<IBookService, GoogleBooksApiBookService>();
-      services.AddTransient<IShoppingCartService, ShoppingCartService>();
+      var builder = new ContainerBuilder();
+      builder.RegisterAssemblyModules(typeof(Startup).GetTypeInfo().Assembly);
+      builder.Populate(services);
 
-      var config = new MapperConfiguration(cfg => cfg.AddProfiles(typeof(Startup).GetTypeInfo().Assembly));
-      services.AddSingleton(config.CreateMapper());
+      var container = builder.Build();
+      return container.Resolve<IServiceProvider>();
     }
 
     public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -54,7 +50,7 @@ namespace VolatilityDecomposition
       }
       else
       {
-        app.UseExceptionHandler("/Home/Error");
+        app.UseExceptionHandler("/Info/Error");
       }
 
       app.UseStaticFiles();

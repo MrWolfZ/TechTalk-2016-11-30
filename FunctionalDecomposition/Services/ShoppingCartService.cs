@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FunctionalDecomposition.DataAccess.Interfaces;
@@ -27,6 +28,7 @@ namespace FunctionalDecomposition.Services
       var cart = await this.GetForCurrentUserAsync();
       cart.Books.Add(book);
       cart.TotalPrice.Amount += book.Price.Amount;
+      NormalizeTotalPrice(cart);
       await this.shoppingCartRepository.AddOrUpdateAsync(cart);
     }
 
@@ -38,9 +40,18 @@ namespace FunctionalDecomposition.Services
       {
         cart.Books.Remove(book);
         cart.TotalPrice.Amount -= book.Price.Amount;
+        NormalizeTotalPrice(cart);
       }
 
-      throw new System.NotImplementedException();
+      throw new NotImplementedException();
+    }
+
+    private static void NormalizeTotalPrice(ShoppingCart cart)
+    {
+      if (cart.TotalPrice.Amount < 0.01)
+      {
+        cart.TotalPrice.Amount = 0;
+      }
     }
 
     private static ShoppingCart CreateEmptyShoppingCart() => new ShoppingCart

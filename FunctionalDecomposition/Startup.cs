@@ -54,7 +54,7 @@ namespace FunctionalDecomposition
       }
       else
       {
-        app.UseExceptionHandler("/Home/Error");
+        app.UseExceptionHandler("/Info/Error");
       }
 
       app.UseStaticFiles();
