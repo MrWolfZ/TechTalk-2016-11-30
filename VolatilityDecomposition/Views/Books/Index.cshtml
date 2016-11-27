@@ -1,0 +1,24 @@
+﻿@{
+  ViewData["Title"] = "Books";
+}
+
+@using VolatilityDecomposition.DataTransferObjects
+@model VolatilityDecomposition.DataTransferObjects.BookSearchResultDto
+
+<div class="row">
+  <div class="col-xs-12" style="padding: 10px;">
+    @using (Html.BeginForm("Index", "Books", FormMethod.Get))
+    {
+      <input type="text" name="q" value="@ViewBag.Query" />
+      <input type="submit" class="btn btn-primary" value="Search" />
+    }
+  </div>
+</div>
+<div class="row">
+  @foreach (var book in Model.Books)
+  {
+    <div class="col-sm-6 col-md-3">
+      @Html.Partial("_Book", book)
+    </div>
+  }
+</div>

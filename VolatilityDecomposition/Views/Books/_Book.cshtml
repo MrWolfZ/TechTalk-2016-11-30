@@ -1,0 +1,13 @@
+﻿@using VolatilityDecomposition.DataTransferObjects
+@model VolatilityDecomposition.DataTransferObjects.BookDto
+
+<h4 style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="@Html.DisplayTextFor(m => m.Title)">@Html.DisplayTextFor(m => m.Title)</h4>
+<img height="200" src="@Html.DisplayTextFor(m => m.ThumbnailUrl)" alt="No image found" title="@Html.DisplayTextFor(m => m.Title)" />
+<br />
+<span>@Html.DisplayTextFor(m => m.Price.CurrencyCode) @Html.DisplayTextFor(m => m.Price.Amount)</span>
+<br />
+@using (Html.BeginForm("AddBook", "ShoppingCart", new { q = @ViewBag.Query }, FormMethod.Post))
+{
+  @Html.HiddenFor(m => m.Id)
+  <input type="submit" class="btn btn-primary" value="Add to Cart" style="margin: 5px 0 10px 0;" />
+}
